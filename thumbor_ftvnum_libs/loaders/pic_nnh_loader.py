@@ -11,7 +11,7 @@
 #from thumbor.loaders import file_loader, http_loader
 import urllib
 from thumbor.loaders import http_loader
-from . import f_loader
+from thumbor_ftvnum_libs.loaders import pic_nn_loader
 from tornado.concurrent import return_future
 #from thumbor.loaders import LoaderResult
 
@@ -25,4 +25,4 @@ def load(context, path, callback):
             http_loader.load(context, path, callback)
 
     # First attempt to load with file_loader
-    f_loader.load(context, path, callback_wrapper)
+    pic_nn_loader.load(context, path, callback_wrapper)
