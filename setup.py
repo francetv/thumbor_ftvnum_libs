@@ -8,7 +8,6 @@ from distutils.core import setup
 
 setup(
     name = "thumbor_ftvnum_libs",
-    packages = ["thumbor_ftvnum_libs"],
     version = "0.0.3",
     description = "libs thumbor",
     author = "Bertrand Thill",
