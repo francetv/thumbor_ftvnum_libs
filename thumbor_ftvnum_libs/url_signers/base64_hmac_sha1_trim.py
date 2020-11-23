@@ -15,7 +15,7 @@ class UrlSigner(BaseUrlSigner):
     """Validate urls and sign them using base64 hmac-sha1
     """
 
-    async def signature(self, url):
+    def signature(self, url):
         return base64.urlsafe_b64encode(
             hmac.new(
                 self.security_key, str(url).encode('utf-8'), hashlib.sha1

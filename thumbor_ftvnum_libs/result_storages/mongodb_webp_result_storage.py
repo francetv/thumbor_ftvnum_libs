@@ -4,9 +4,9 @@
 # Copyright (c) 2019 HZ HZ@blackhand.org
 
 import time
-import urllib.request, urllib.parse, urllib.error
+import urllib
 from datetime import datetime, timedelta
-from io import StringIO
+from cStringIO import StringIO
 from pymongo import MongoClient
 from thumbor.result_storages import BaseStorage
 from thumbor.utils import logger
@@ -20,7 +20,7 @@ class Storage(BaseStorage):
         return self.context.config.AUTO_WEBP and self.context.request.accepts_webp
 
     def __conn__(self):
-        password = urllib.parse.quote_plus(self.context.config.MONGO_RESULT_STORAGE_SERVER_PASSWORD)
+        password = urllib.quote_plus(self.context.config.MONGO_RESULT_STORAGE_SERVER_PASSWORD)
         user = self.context.config.MONGO_RESULT_STORAGE_SERVER_USER
         if not self.context.config.MONGO_RESULT_STORAGE_SERVER_REPLICASET:
           uri = 'mongodb://'+ user +':' + password + '@' + self.context.config.MONGO_RESULT_STORAGE_SERVER_HOST + '/?authSource=' + self.context.config.MONGO_RESULT_STORAGE_SERVER_DB
@@ -56,7 +56,7 @@ class Storage(BaseStorage):
         return path
 
 
-    async def put(self, image_bytes):
+    def put(self, bytes):
         connection, db, storage = self.__conn__()
         key = self.get_key_from_request()
         max_age = self.get_max_age()
@@ -74,7 +74,7 @@ class Storage(BaseStorage):
         doc = {
             'path': key,
             'created_at': datetime.utcnow(),
-            'data': Binary(image_bytes),
+            'data': Binary(bytes),
             'content-type': content_t,
             'ref_id': ref_img2
             }
@@ -92,7 +92,7 @@ class Storage(BaseStorage):
 
 
 
-    async def get(self):
+    def get(self):
         '''Get the item .'''
         connection, db, storage = self.__conn__()
         key = self.get_key_from_request()
@@ -111,7 +111,7 @@ class Storage(BaseStorage):
         return tosend
 
 
-    async def remove(self, path):
+    def remove(self, path):
         #if not self.exists(path):
         #    return
 
@@ -120,15 +120,15 @@ class Storage(BaseStorage):
             try:
                 storage.remove({'path': path, "content-type": "webp"})
             except:
-                pass #return
+                return
         else:
             try:
                 storage.remove({'path': path, "content-type": "default"})
             except:
-                pass #return
+                return
 
 
-    async def __is_expired(self, result):
+    def __is_expired(self, result):
         timediff = datetime.utcnow() - result.get('created_at')
         return timediff > timedelta(seconds=self.context.config.RESULT_STORAGE_EXPIRATION_SECONDS)
         '''future => db.log_events.createIndex( { "createdAt": 1 }, { expireAfterSeconds: 3600 } )

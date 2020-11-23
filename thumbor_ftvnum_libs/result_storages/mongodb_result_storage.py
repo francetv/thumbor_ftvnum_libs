@@ -120,5 +120,3 @@ class Storage(BaseStorage):
         {getParameter:1, expireAfterSeconds: 1}      
         '''
         
-
-
