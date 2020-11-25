@@ -33,7 +33,10 @@ setup(
                    'Topic :: Multimedia :: Graphics :: Presentation'
     ],
     package_dir = {"thumbor_ftvnum_libs": "thumbor_ftvnum_libs"},
-    install_requires=['thumbor>=6.7.0'],
+    install_requires=[
+        'thumbor>=6.7.0',
+        'pymongo>=3.4.0'
+    ]
     long_description = """\
 This module test support for file.
 """
