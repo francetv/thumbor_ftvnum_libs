@@ -8,7 +8,7 @@ from distutils.core import setup
 
 setup(
     name = "thumbor_ftvnum_libs",
-    version = "0.0.4",
+    version = "0.1.0",
     description = "libs thumbor",
     author = "Bertrand Thill",
     author_email = "bertrand.thill@francetv.fr",
@@ -33,7 +33,7 @@ setup(
                    'Topic :: Multimedia :: Graphics :: Presentation'
     ],
     package_dir = {"thumbor_ftvnum_libs": "thumbor_ftvnum_libs"},
-    install_requires=['thumbor>=6.5.0'],
+    install_requires=['thumbor>=6.7.0'],
     long_description = """\
 This module test support for file.
 """

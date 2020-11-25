@@ -13,7 +13,6 @@ import urllib
 from thumbor.loaders import http_loader
 from thumbor_ftvnum_libs.loaders import pic_nn_loader
 from tornado.concurrent import return_future
-#from thumbor.loaders import LoaderResult
 
 @return_future
 def load(context, path, callback):
