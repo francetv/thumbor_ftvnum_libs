@@ -18,8 +18,8 @@ Collection de modules pour Thumbor
 Test seulement.
 
 Environnement:
-Thumbor 6.7
-Python 2.7
+Thumbor 7.0
+Python 3.6
 
 
 # Loaders

@@ -8,11 +8,11 @@ from distutils.core import setup
 
 setup(
     name = "thumbor_ftvnum_libs",
-    version = "0.1.3",
+    version = "3.7.0",
     description = "libs thumbor",
     author = "Bertrand Thill",
     author_email = "bertrand.thill@francetv.fr",
-    keywords = ["thumbor", "fallback", "images", "nfs"],
+    keywords = ["thumbor", "fallback", "images", "nfs", "mongodb"],
     license = 'MIT',
     url = 'https://github.com/francetv/thumbor_ftvnum_libs',
     packages=[
@@ -28,12 +28,12 @@ setup(
                    'License :: OSI Approved :: MIT License',
                    'Natural Language :: English',
                    'Operating System :: POSIX :: Linux',
-                   'Programming Language :: Python :: 2.7',
+                   'Programming Language :: Python :: 3.6',
                    'Topic :: Internet :: WWW/HTTP :: Dynamic Content',
                    'Topic :: Multimedia :: Graphics :: Presentation'
     ],
     package_dir = {"thumbor_ftvnum_libs": "thumbor_ftvnum_libs"},
-    install_requires=['thumbor>=6.7.0','pymongo>=3.4.0'],
+    install_requires=['thumbor>=7.0.0a5','pymongo>=3.4.0'],
     long_description = """\
 This module test support for file.
 """

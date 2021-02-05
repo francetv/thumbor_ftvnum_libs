@@ -18,8 +18,7 @@ from tornado.concurrent import return_future
 from thumbor.loaders import LoaderResult
 
 
-@return_future
-def load(context, path, callback):
+async def load(context, path):
     file_path = join(
         context.config.PIC_LOADER_ROOT_PATH.rstrip('/'), path.lstrip('/'))
     file_path = abspath(file_path)
@@ -36,8 +35,8 @@ def load(context, path, callback):
         if not inside_root_path_two:
           result.error = LoaderResult.ERROR_NOT_FOUND
           result.successful = False
-          callback(result)
-        return
+          return result #callback(result)
+        pass #return
 
     # keep backwards compatibility, try the actual path first
     # if not found, unquote it and try again
@@ -73,5 +72,4 @@ def load(context, path, callback):
         result.error = LoaderResult.ERROR_NOT_FOUND
         result.successful = False
 
-    callback(result)
-
+    return result

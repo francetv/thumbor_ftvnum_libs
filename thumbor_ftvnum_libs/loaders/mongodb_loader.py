@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/mit-license
+
+# OFFLINE
+
 from tornado.concurrent import return_future
 from pymongo import MongoClient
 from bson.objectid import ObjectId
