@@ -2,6 +2,8 @@
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/mit-license
 
+# OFFLINE DEPRECATED
+
 import gridfs
 import urllib.request, urllib.parse, urllib.error
 import re

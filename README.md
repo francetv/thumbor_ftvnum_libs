@@ -2,7 +2,7 @@
 Libs for thumbor
 
 ## Table of Contents
-1. [General purposes] (#General)
+1. [General purposes](#General)
 2. [Loaders](#Loaders)
 3. [Storages](#Storages)
 4. [Result_storages](#Result_storages)
@@ -11,25 +11,28 @@ Libs for thumbor
 
 
 
-#General
+# General
 
 Collection de modules pour Thumbor
 
 Test seulement.
 
 Environnement:
-Thumbor 7.0
-Python 3.6
+
+* [Thumbor](https://github.com/thumbor/thumbor/releases/tag/7.0.0a5): Version 7.0.0a5
+* [Python](https://www.python.org/downloads/release/python-373/): Version 3.7.3
+* [MongoDB](https://docs.mongodb.com/manual/release-notes/4.0/): Version 4.0
 
 
 # Loaders
 
-1. [pic_nn_loader] (#pic_nn_loader)
-2. [piv_nnh_loader] (#pic_nnh_loader)
+1. [pic_nn_loader: NFS fallback NFS](#pic_nn_loader)
+2. [pic_nnh_loader: HTTP et NFS fallback NFS](#pic_nnh_loader)
+3. [mongodb_gridfs_loader: MONGODB GridFS](#mongodb_gridfs_loader)
 
 ## pic_nn_loader
 
-Description: Loader de type file, avec un fallback sur une autre filesystem.
+Description: Loader de type file, avec un fallback sur un autre filesystem.
 
 Implementation: 
 ```
@@ -45,7 +48,7 @@ PIC_LOADER_MAX_SIZE = #max size in bytes default 16777216
 
 ## pic_nnh_loader
 
-Description: Loader de type pic_nn_loader, avec un fallback sur du http/s http_loader.
+Description: Loader de type pic_nn_loader, avec un fallback sur du http/s http_loader (test si path contient du http sinon passage sur filesystem).
 
 Implementation: 
 ```
@@ -99,11 +102,15 @@ if (req.http.Accept ~ "image/webp") {
 }
 ```
 
+
 # storages
+
+1. [mongodb_webp_storage: MongoDB GridFS](#mongodb_webp_storage)
+2. [mongodb_storage: DEPRECATED](#mongodb_storage)
 
 ## mongodb_webp_storage
 
-Description: Stockage des images pour MongoDB/GridFS compatible avec la fonction auto_webp.
+Description: Stockage des images pour MongoDB/GridFS compatible avec la fonction auto_webp (PASS).
 
 Implementation: 
 ```
@@ -125,7 +132,7 @@ MONGO_STORAGE_SERVER_READ = 'secondaryPreferred'
 
 ## mongodb_storage
 
-Description: Stockage des images pour MongoDB/GridFS (Legacy).
+Description: Stockage des images pour MongoDB/GridFS (DEPRECATED).
 
 Implementation: 
 ```
@@ -145,11 +152,15 @@ MONGO_STORAGE_SERVER_REPLICASET = 'myReplica' # name of the replicaset - option
 MONGO_STORAGE_SERVER_READ = 'secondaryPreferred'
 ```
 
+
 # Result_storages
+
+1. [mongodb_webp_result_storage: MongoDB GridFS](#mongodb_webp_result_storage)
+2. [mongodb_result_storage: DEPRECATED](#mongodb_storage)
 
 ## mongodb_webp_result_storage
 
-Description: Mise en cache des images pour MongoDB compatible avec la fonction auto_webp.
+Description: Mise en cache des images pour MongoDB compatible avec la fonction auto_webp (PASS).
 
 Implementation: 
 ```
@@ -169,7 +180,7 @@ MONGO_RESULT_STORAGE_SERVER_REPLICASET = 'myReplica' # name of the replicaset - 
 MONGO_RESULT_STORAGE_SERVER_READ = 'secondaryPreferred'
 ```
 
-Note: avec utilisation de Varnish quelques modifs sont réaliser
+Note: avec utilisation de Varnish quelques modifs sont a réaliser
 
 Exemple: https://www.fastly.com/blog/test-new-encodings-fastly-including-webp
 
@@ -222,7 +233,7 @@ sub vcl_fetch {
 
 ## mongodb_result_storage
 
-Description: Mise en cache des images pour MongoDB (Legacy).
+Description: Mise en cache des images pour MongoDB (DEPRECATED).
 
 Implementation: 
 ```
@@ -242,11 +253,15 @@ MONGO_RESULT_STORAGE_SERVER_REPLICASET = 'myReplica' # name of the replicaset - 
 MONGO_RESULT_STORAGE_SERVER_READ = 'secondaryPreferred'
 ```
 
+
 # Url_signers
+
+1. [base64_hmac_sha1_trim: MongoDB GridFS](#base64_hmac_sha1_trim)
+2. [base64_hmac_sha1_notrim: DEPRECATED](#none)
 
 ## base64_hmac_sha1_trim
 
-Description: Url signers basique avec fonction trim.
+Description: Url signers basique avec fonction trim (PASS).
 
 Implementation: 
 ```

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 # Licensed under the MIT license:
 # http://www.opensource.org/licenses/mit-license
+
 from tornado.concurrent import return_future
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -9,7 +10,7 @@ import gridfs
 import urllib.request, urllib.parse, urllib.error
 from thumbor.loaders import LoaderResult
 
-async def __conn__(self):
+def __conn__(self):
     the_database = self.config.MONGO_ORIGIN_SERVER_DB
     if urllib.parse.quote_plus(self.config.MONGO_ORIGIN_SERVER_USER):
         password = urllib.parse.quote_plus(self.config.MONGO_ORIGIN_SERVER_PASSWORD)
@@ -23,7 +24,7 @@ async def __conn__(self):
     return db
 
 
-async def load(self, path):
+async def load(context, path):
     db = __conn__(self)
     words2 = path.split("/")
     storage = self.config.MONGO_ORIGIN_SERVER_COLLECTION

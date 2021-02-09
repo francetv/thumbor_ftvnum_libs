@@ -3,7 +3,7 @@
 # http://www.opensource.org/licenses/mit-license
 # Copyright (c) 2019 HZ HZ@blackhand.org
 
-# OFFLINE
+# OFFLINE DEPRECATED
 
 
 import time

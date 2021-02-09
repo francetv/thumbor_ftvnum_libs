@@ -50,7 +50,6 @@ class Storage(BaseStorage):
         :rettype: string
         '''
         path = "result:%s" % self.context.request.url
-
         #if self.is_auto_webp():
         #    path += '/webp'
         return path
@@ -96,15 +95,16 @@ class Storage(BaseStorage):
         '''Get the item .'''
         connection, db, storage = self.__conn__()
         key = self.get_key_from_request()
+        logger.debug("[RESULT_STORAGE] image not found at %s", key)
         if self.is_auto_webp:
             result = storage.find_one({"path": key, "content-type": "webp"})
         else:
             result = storage.find_one({"path": key, "content-type": "default"})
         if not result: # or self.__is_expired(result):
             return None
-        if result and  self.__is_expired(result):
+        if result and  await self.__is_expired(result):
             ttl = result.get('path')
-            self.remove(ttl)
+            await self.remove(ttl)
             return None
 
         tosend = result['data']
@@ -136,4 +136,5 @@ class Storage(BaseStorage):
         {keyPattern: <index_spec> || name: <index_name>, expireAfterSeconds: <seconds> }
         {getParameter:1, expireAfterSeconds: 1}
         '''
+
 

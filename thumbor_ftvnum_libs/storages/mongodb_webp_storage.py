@@ -74,7 +74,7 @@ class Storage(BaseStorage):
         else:
             return False
 
-    async def get_crypto(self, path):
+    def get_crypto(self, path):
         connection, db, storage = self.__conn__()
         tpath = self.truepath(path)
         pasplit = path.split("/")
@@ -94,21 +94,18 @@ class Storage(BaseStorage):
         else:
             return None
 
-
-
     async def get(self, path):
         connection, db, storage = self.__conn__()
         tpath = self.truepath(path)
         stored = storage.find_one({'path': tpath})
         if not stored:
             return None
-        if self.__is_expired(stored):
+        # if self.__is_expired(stored):
             #self.remove(path)
-            return None
+        #    return None
         fs = gridfs.GridFS(db)
         contents = fs.get(stored['file_id']).read()
-        return str(contents)
-
+        return bytes(contents)
 
     async def exists(self, path):
         connection, db, storage = self.__conn__()
@@ -136,6 +133,6 @@ class Storage(BaseStorage):
         except:
             pass
 
-    async def __is_expired(self, stored):
+    def __is_expired(self, stored):
         timediff = datetime.utcnow() - stored.get('created_at')
         return timediff > timedelta(seconds=self.context.config.STORAGE_EXPIRATION_SECONDS)
