@@ -11,6 +11,7 @@ from cStringIO import StringIO
 from pymongo import MongoClient
 from thumbor.storages import BaseStorage
 from tornado.concurrent import return_future
+from bson import ObjectId
 
 class Storage(BaseStorage):
 
@@ -31,7 +32,7 @@ class Storage(BaseStorage):
         tpath = self.truepath(path)
         doc = {
             'path': tpath,
-            'created_at': datetime.utcnow()           
+            'created_at': datetime.utcnow()
         }
         doc_with_crypto = dict(doc)
 
@@ -40,11 +41,28 @@ class Storage(BaseStorage):
                 raise RuntimeError("STORES_CRYPTO_KEY_FOR_EACH_IMAGE can't be True if no SECURITY_KEY specified")
             doc_with_crypto['crypto'] = self.context.server.security_key
 
-        fs = gridfs.GridFS(db)
-        file_data = fs.put(StringIO(bytes), **doc)
-        doc_with_crypto['file_id'] = file_data
-        storage.insert(doc_with_crypto)
-        return  tpath
+        stored = storage.find_one({'path': tpath})
+        if not stored:
+
+            fs = gridfs.GridFS(db)
+            file_data = fs.put(StringIO(bytes), **doc)
+            doc_with_crypto['file_id'] = file_data
+            storage.insert(doc_with_crypto)
+            return  tpath
+        else:
+            fs = gridfs.GridFS(db)
+            stored = storage.find_one({'path': tpath})
+            #oldval = storage.get(stored['file_id']).read()
+            fs.delete(stored['file_id']);
+            file_data = fs.put(StringIO(bytes), **doc)
+            doc_with_crypto['file_id'] = file_data
+            storage.find_one_and_update(
+                {"path" : tpath },
+                {"$set":{"file_id": file_data ,"test": "ok"}}
+                )
+            #fs.delete(stored['oldval'])
+            return tpath
+
 
     def put_crypto(self, path):
         if not self.context.config.STORES_CRYPTO_KEY_FOR_EACH_IMAGE:
@@ -67,13 +85,15 @@ class Storage(BaseStorage):
         return pasplit[0]
 
     def truepath(self, path):
-
-        pasplit = path.split("/")
-        # cas du // vide a gerer
-        pasplitf = re.search('^[a-z0-9A-Z]+', pasplit[0]).group(0)
-        fichier = open("/tmp/data.txt", "a")
-
-        return pasplitf
+        return path
+        #pasplit = path.split("/")
+        ## cas du // vide a gerer
+        #pasplitf = re.search('^[a-z0-9A-Z]+', pasplit[0]).group(0)
+        #if  pasplit[0]:
+        #    pasplitf = re.search('^[a-z0-9A-Z]+', pasplit[0]).group(0)
+        #    return  pasplitf
+        #else:
+        #    return False
 
     @return_future
     def get_crypto(self, path, callback):
@@ -116,6 +136,10 @@ class Storage(BaseStorage):
         connection, db, storage = self.__conn__()
         tpath = self.truepath(path)
         stored = storage.find_one({'path': tpath})
+        if tpath:
+            stored = storage.find_one({'path': tpath})
+        else:
+            callback(False)
 
         if not stored or self.__is_expired(stored):
             callback(False)
@@ -137,5 +161,8 @@ class Storage(BaseStorage):
             return
 
     def __is_expired(self, stored):
-        timediff = datetime.utcnow() - stored.get('created_at')
-        return timediff > timedelta(seconds=self.context.config.STORAGE_EXPIRATION_SECONDS)
+        if self.context.config.STORAGE_EXPIRATION_SECONDS:
+            timediff = datetime.utcnow() - stored.get('created_at')
+            return timediff > timedelta(seconds=self.context.config.STORAGE_EXPIRATION_SECONDS)
+        else:
+            return 1
