@@ -167,6 +167,7 @@ MONGO_RESULT_STORAGE_SERVER_PASSWORD = '' # password
 MONGO_RESULT_STORAGE_SERVER_AUTH = '' # credential stored in this db
 MONGO_RESULT_STORAGE_SERVER_REPLICASET = 'myReplica' # name of the replicaset - option
 MONGO_RESULT_STORAGE_SERVER_READ = 'secondaryPreferred'
+MONGO_RESULT_STORAGE_MAXCACHESIZE = 15900000 # Max size in Bytes for Binary in doc MongoDB, if 0 deactivated but limited at 16MB BSON
 ```
 
 Note: avec utilisation de Varnish quelques modifs sont réaliser

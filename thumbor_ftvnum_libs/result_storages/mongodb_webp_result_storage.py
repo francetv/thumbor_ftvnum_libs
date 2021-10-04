@@ -87,14 +87,20 @@ class Storage(BaseStorage):
                     seconds=result_ttl
                 )
                 doc_cpm['expire'] = ref
+        
+        try:
+            self.context.config.MONGO_RESULT_STORAGE_MAXCACHESIZE
+            maxs = self.context.config.MONGO_RESULT_STORAGE_MAXCACHESIZE
+        except:
+            maxs = 0
+
         amd = getsizeof(bytes)
-        if amd > 15900000:
-            logger.warning(u" OVERSIZE! %s: pas de mise en cache possible car > 16MB", key)
+        if  amd > maxs and maxs > 0:
+            logger.warning(u"OVERSIZE %s: %s > %s pas de mise en cache possible", key, amd, maxs)
             return None
         else:
             storage.insert(doc_cpm)
             return key
-
 
 
     def get(self):
