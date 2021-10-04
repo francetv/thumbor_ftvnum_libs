@@ -16,6 +16,8 @@ from six.moves.urllib.parse import unquote
 from tornado.concurrent import return_future
 
 from thumbor.loaders import LoaderResult
+from thumbor.utils import logger
+
 
 
 @return_future
@@ -50,25 +52,35 @@ def load(context, path, callback):
     if exists(file_path):
         with open(file_path, 'r') as f:
             stats = fstat(f.fileno())
+            
+            if stats.st_size == 0:
+                logger.warning(u"%s: cette image source est vide...", file_path)
+                result.successful = False
+                result.error = LoaderResult.ERROR_UPSTREAM
+            else:
+                result.successful = True
+                result.buffer = f.read()
 
-            result.successful = True
-            result.buffer = f.read()
-
-            result.metadata.update(
-                size=stats.st_size,
-                updated_at=datetime.utcfromtimestamp(stats.st_mtime))
+                result.metadata.update(
+                    size=stats.st_size,
+                    updated_at=datetime.utcfromtimestamp(stats.st_mtime))
+    
     elif exists(file_path_two):
          with open(file_path_two, 'r') as f:
             stats = fstat(f.fileno())
+            
+            if stats.st_size == 0:
+                logger.warning(u"%s: cette image source est vide...", file_path_two)
+                result.successful = False
+                result.error = LoaderResult.ERROR_UPSTREAM
+            else:
+                result.successful = True
+                result.buffer = f.read()
 
-            result.successful = True
-            result.buffer = f.read()
-
-            result.metadata.update(
-                size=stats.st_size,
-                updated_at=datetime.utcfromtimestamp(stats.st_mtime))
-
-
+                result.metadata.update(
+                    size=stats.st_size,
+                    updated_at=datetime.utcfromtimestamp(stats.st_mtime))
+    
     else:
         result.error = LoaderResult.ERROR_NOT_FOUND
         result.successful = False
