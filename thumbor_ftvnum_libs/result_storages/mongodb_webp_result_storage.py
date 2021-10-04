@@ -5,14 +5,16 @@
 
 import time
 import urllib
+import bson
+import re
 from datetime import datetime, timedelta
 from cStringIO import StringIO
 from pymongo import MongoClient
 from thumbor.result_storages import BaseStorage
 from thumbor.utils import logger
-import bson
+from sys import getsizeof
 from bson.binary import Binary
-import re
+
 
 class Storage(BaseStorage):
     @property
@@ -85,10 +87,13 @@ class Storage(BaseStorage):
                     seconds=result_ttl
                 )
                 doc_cpm['expire'] = ref
-
-        storage.insert(doc_cpm)
-
-        return key
+        amd = getsizeof(bytes)
+        if amd > 15900000:
+            logger.warning(u" OVERSIZE! %s: pas de mise en cache possible car > 16MB", key)
+            return None
+        else:
+            storage.insert(doc_cpm)
+            return key
 
 
 
