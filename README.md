@@ -241,6 +241,7 @@ MONGO_RESULT_STORAGE_SERVER_PASSWORD = '' # password
 MONGO_RESULT_STORAGE_SERVER_AUTH = '' # credential stored in this db
 MONGO_RESULT_STORAGE_SERVER_REPLICASET = 'myReplica' # name of the replicaset - option
 MONGO_RESULT_STORAGE_SERVER_READ = 'secondaryPreferred'
+MONGO_RESULT_STORAGE_MAXCACHESIZE = 0 #taille max en octet pour une image en cache
 ```
 
 # Url_signers
