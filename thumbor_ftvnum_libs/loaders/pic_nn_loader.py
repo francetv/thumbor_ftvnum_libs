@@ -53,7 +53,7 @@ def load(context, path, callback):
         with open(file_path, 'r') as f:
             stats = fstat(f.fileno())
             
-            if stats.st_size == 0:
+            if stats.st_size <= 1:
                 logger.warning(u"%s: cette image source est vide...", file_path)
                 result.successful = False
                 result.error = LoaderResult.ERROR_UPSTREAM
@@ -69,7 +69,7 @@ def load(context, path, callback):
          with open(file_path_two, 'r') as f:
             stats = fstat(f.fileno())
             
-            if stats.st_size == 0:
+            if stats.st_size <= 1:
                 logger.warning(u"%s: cette image source est vide...", file_path_two)
                 result.successful = False
                 result.error = LoaderResult.ERROR_UPSTREAM
