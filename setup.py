@@ -8,7 +8,7 @@ from distutils.core import setup
 
 setup(
     name = "thumbor_ftvnum_libs",
-    version = "0.1.10",
+    version = "0.1.11",
     description = "libs thumbor",
     author = "Bertrand Thill",
     author_email = "bertrand.thill@francetv.fr",

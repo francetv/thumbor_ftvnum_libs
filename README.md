@@ -170,6 +170,8 @@ MONGO_RESULT_STORAGE_SERVER_READ = 'secondaryPreferred'
 MONGO_RESULT_STORAGE_MAXCACHESIZE = 15900000 # Max size in Bytes for Binary in doc MongoDB, if 0 deactivated but limited at 16MB BSON
 ```
 
+
+
 Note: avec utilisation de Varnish quelques modifs sont réaliser
 
 Exemple: https://www.fastly.com/blog/test-new-encodings-fastly-including-webp
@@ -220,6 +222,9 @@ sub vcl_fetch {
 #FASTLY fetch
 }
 ```
+## mongodb_webp_result_storage_fc
+
+Description: Mise en cache des images pour MongoDB identique a mongodb_webp_result_storage mais excluant les test ttl (effectué via un index mongo).
 
 ## mongodb_result_storage
 
