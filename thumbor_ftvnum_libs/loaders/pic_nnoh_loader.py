@@ -13,12 +13,13 @@ from thumbor.loaders import http_loader
 from thumbor_ftvnum_libs.loaders import pic_nn_loader
 from tornado.concurrent import return_future
 
+import re
+import urllib
 
 @return_future
 def load(context, path, callback):
-    #if re.search('http[s]?://.*', path):
-    if (path.find('http') != -1):
-      http_loader.load(context, path, callback)
+    strclean=urllib.unquote(path)
+    if re.search('^http[s]?://', strclean):
+        http_loader.load(context, path, callback)
     else:
-      pic_nn_loader.load(context, path, callback)
-
+        pic_nn_loader.load(context, path, callback)
